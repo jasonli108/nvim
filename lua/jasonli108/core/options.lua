@@ -17,7 +17,32 @@ opt.wrap = true -- disable line wrapping
 
 -- undo persistent
 opt.undofile = true
-opt.undodir = vim.fn.stdpath("data") .. "/undo"  -- ~/.local/share/nvim/undo
+local undodir = vim.fn.stdpath("state") .. "/undo"
+
+-- Function to delete undo files older than 30 days
+local function cleanup_undo_files()
+	local day_limit = 30
+	local seconds_limit = day_limit * 24 * 60 * 60
+	local current_time = os.time()
+
+	-- Get list of all files in the undo directory
+	local files = vim.fn.glob(undodir .. "/*", false, true)
+
+	for _, file in ipairs(files) do
+		local stats = vim.loop.fs_stat(file)
+		if stats and stats.type == "file" then
+			local mtime = stats.mtime.sec
+			if (current_time - mtime) > seconds_limit then
+				os.remove(file)
+			end
+		end
+	end
+end
+
+-- Run cleanup on startup
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = cleanup_undo_files,
+})
 
 -- search settings
 opt.ignorecase = true -- ignore case when searching
@@ -41,7 +66,6 @@ opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or 
 -- opt.clipboard:append("unnamedplus") -- use system clipboard as default register
 opt.clipboard = "unnamedplus" -- use system clipboard as default register
 
-
 -- split windows
 opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- split horizontal window to the bottom
@@ -50,28 +74,28 @@ opt.splitbelow = true -- split horizontal window to the bottom
 opt.swapfile = false
 
 vim.g.python_indent = {
-  disable_parentheses_indent = false,
-  closed_paren_align_last_line = false,
+	disable_parentheses_indent = false,
+	closed_paren_align_last_line = false,
 }
 
 -- spell
-opt.spell=true
-opt.spelllang="en"
-opt.spellfile=vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
+opt.spell = true
+opt.spelllang = "en"
+opt.spellfile = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
 
 vim.opt.list = true
 vim.opt.listchars = {
-  -- space = "·",
-  tab = "▸ ",
-  trail = "▫",
+	-- space = "·",
+	tab = "▸ ",
+	trail = "▫",
 }
 
-opt.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 -- foldering stuff
 -- Enable Treesitter-based folding
-opt.foldmethod = 'expr'
+opt.foldmethod = "expr"
 -- opt.foldexpr = 'nvim_treesitter#foldexpr()'
-opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
 -- vim.opt.foldmethod = 'manual'
 -- opt.foldmethod = 'indent'
@@ -79,5 +103,3 @@ opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 -- opt.foldenable = true
 opt.foldlevel = 0
 -- opt.foldlevelstart = 0
-
-
