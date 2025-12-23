@@ -4,7 +4,7 @@ local lsp_servers = {
 }
 
 return {
-	-- 1. Ensure all binaries are installed
+	-- 1. Mason Tools
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		opts = function(_, opts)
@@ -13,14 +13,13 @@ return {
 				lsp_servers.python_ls,
 				lsp_servers.python_linter,
 				"black",
-				"isort", -- ➕ Added isort
 				"debugpy",
 				"mypy",
 			})
 		end,
 	},
 
-	-- 2. Inject settings into main LSP config
+	-- 2. LSP Setup
 	{
 		"neovim/nvim-lspconfig",
 		opts = function(_, opts)
@@ -28,39 +27,33 @@ return {
 			opts.servers[lsp_servers.python_ls] = {
 				settings = { python = { analysis = { autoSearchPaths = true } } },
 			}
-			-- 💡 Pro-tip: If you use Ruff, it can also sort imports.
-			-- But since you want isort specifically, we'll keep this as is.
-			opts.servers[lsp_servers.python_linter] = {
-				init_options = { settings = { logLevel = "error" } },
-			}
 		end,
 	},
 
-	-- 3. Robust DAP setup
-	{
-		"mfussenegger/nvim-dap",
-		dependencies = { "mfussenegger/nvim-dap-python" },
-		config = function()
-			local mason_path = vim.fn.stdpath("data") .. "/mason/packages/debugpy"
-			local platform = vim.loop.os_uname().sysname
-			local python_path = platform == "Windows_NT" and mason_path .. "/venv/Scripts/python.exe"
-				or mason_path .. "/venv/bin/python"
-			require("dap-python").setup(python_path)
-		end,
-	},
+	-- 3. Formatting (Forced Import Movement)
 
-	-- 4. Formatting (Updated for isort)
 	{
 		"stevearc/conform.nvim",
+		event = { "BufWritePre" }, -- Run on save
+		cmd = { "ConformInfo" },
 		opts = {
 			formatters_by_ft = {
-				-- ➕ Runs isort first, then black
 				python = { "isort", "black" },
+			},
+			formatters = {
+				isort = {
+					-- This flag forces imports past code barriers to the very top
+					prepend_args = { "--float-to-top" },
+				},
+			},
+			format_on_save = {
+				timeout_ms = 500,
+				lsp_fallback = true,
 			},
 		},
 	},
 
-	-- 5. VirtualEnv Selection
+	-- 4. Venv Selector (FIXED SYNTAX)
 	{
 		"linux-cultist/venv-selector.nvim",
 		branch = "regexp",
@@ -69,7 +62,7 @@ return {
 		keys = { { "<leader>cv", "<cmd>VenvSelect<cr>", desc = "Select VirtualEnv" } },
 	},
 
-	-- 6. Treesitter
+	-- 5. Treesitter
 	{
 		"nvim-treesitter/nvim-treesitter",
 		opts = function(_, opts)

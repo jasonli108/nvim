@@ -1,34 +1,21 @@
 return {
 	"stevearc/conform.nvim",
-	lazy = true,
-	event = { "BufReadPre", "BufNewFile" },
-	config = function()
+	event = { "BufWritePre" },
+	cmd = { "ConformInfo" },
+	opts = {
+		formatters_by_ft = {
+			-- 1. Organize/Fix imports, 2. Format code
+			python = { "ruff_organize_imports", "ruff_format" },
+			lua = { "stylua" },
+		},
+		format_on_save = {
+			timeout_ms = 500,
+			lsp_fallback = true,
+		},
+	},
+	config = function(_, opts)
 		local conform = require("conform")
-
-		conform.setup({
-			formatters_by_ft = {
-				lua = { "stylua" },
-				java = { "google-java-format" }, -- Use the standard name or your custom key
-				python = { "black" }, -- Added python since you defined black below
-				["*"] = { "codespell" },
-				["_"] = { "trim_whitespace" },
-			},
-			formatters = {
-				-- Overriding the built-in google-java-format or defining a custom one
-				["google-java-format"] = {
-					prepend_args = { "--aosp" },
-				},
-				black = {
-					prepend_args = { "--line-length", "100" },
-				},
-			},
-      -- please note auto format might delete some data that's desired
-			format_after_save = {
-				async = false,
-				lsp_fallback = true,
-				timeout_ms = 8000,
-			},
-		})
+		conform.setup(opts)
 
 		-- Keymap for Conform formatting (handles both buffer and visual range)
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
