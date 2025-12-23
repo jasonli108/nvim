@@ -15,6 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   { import = "jasonli108.plugins" },
+  { import = "jasonli108.plugins.ais" },
   { import = "jasonli108.plugins.coding" },
   { import = "jasonli108.plugins.editor" },
   { import = "jasonli108.plugins.game" },

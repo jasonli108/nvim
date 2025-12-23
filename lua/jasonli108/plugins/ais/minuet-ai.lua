@@ -1,0 +1,32 @@
+-- Using Lazy.nvim plugin manager
+--
+return {}
+-- return {
+-- 	{
+-- 		"milanglacier/minuet-ai.nvim",
+-- 		dependencies = { "nvim-lua/plenary.nvim" },
+-- 		config = function()
+-- 			require("minuet").setup({
+-- 				provider = "gemini",
+-- 				provider_options = {
+-- 					gemini = {
+-- 						model = "gemini-1.5-flash", -- Best balance for free tier
+-- 						system = {
+-- 							template = "You are a senior software engineer. Complete the code naturally.",
+-- 						},
+-- 					},
+-- 				},
+-- 				-- Important: Use virtualtext for ghost-text style completion
+-- 				virtualtext = {
+-- 					auto_trigger_ft = {}, -- Disable auto-trigger to avoid conflicts with Codeium
+-- 					keymap = {
+-- 						accept = "<A-A>", -- Alt-A to accept
+-- 						next = "<A-]>", -- Alt-] to cycle
+-- 						prev = "<A-[>", -- Alt-[ to cycle back
+-- 						dismiss = "<A-e>",
+-- 					},
+-- 				},
+-- 			})
+-- 		end,
+-- 	},
+-- }
