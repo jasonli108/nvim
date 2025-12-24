@@ -58,6 +58,7 @@ return {
         -- Returning false ensures your main init.lua continues with standard setup
         return false 
       end
+      return opts
     end,
   },
 
@@ -67,6 +68,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "yamlls" })
+      return opts
     end,
   },
 }

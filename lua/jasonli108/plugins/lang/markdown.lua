@@ -10,6 +10,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "marksman", "markdownlint-cli2", "markdown-toc", "prettier", "cspell" })
+      return opts
     end,
   },
 
@@ -19,6 +20,7 @@ return {
     opts = function(_, opts)
       opts.servers = opts.servers or {}
       opts.servers.marksman = {} -- Basic setup, handled by main init.lua
+      return opts
     end,
   },
 

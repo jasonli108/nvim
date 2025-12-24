@@ -5,6 +5,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "clangd", "clang-format", "codelldb" })
+      return opts
     end,
   },
 
@@ -14,6 +15,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "c", "cpp" })
+      return opts
     end,
   },
 
@@ -73,6 +75,7 @@ return {
         -- Returning false tells the main orchestrator to proceed with lspconfig[server].setup()
         return false
       end
+      return opts
     end,
   },
 
@@ -83,6 +86,7 @@ return {
       opts.sorting = opts.sorting or {}
       opts.sorting.comparators = opts.sorting.comparators or {}
       table.insert(opts.sorting.comparators, 1, require("clangd_extensions.cmp_scores"))
+      return opts
     end,
   },
 

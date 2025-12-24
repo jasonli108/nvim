@@ -5,6 +5,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "cmake" })
+      return opts
     end,
   },
 
@@ -14,6 +15,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "neocmake", "cmakelang", "cmakelint" })
+      return opts
     end,
   },
 
@@ -23,6 +25,7 @@ return {
     opts = function(_, opts)
       opts.servers = opts.servers or {}
       opts.servers.neocmake = {}
+      return opts
     end,
   },
 

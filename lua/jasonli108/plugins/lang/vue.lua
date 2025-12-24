@@ -6,6 +6,7 @@ return {
       opts.ensure_installed = opts.ensure_installed or {}
       -- Mason package name is still vue-language-server
       vim.list_extend(opts.ensure_installed, { "vue-language-server" })
+      return opts
     end,
   },
 
@@ -16,6 +17,7 @@ return {
       opts.ensure_installed = opts.ensure_installed or {}
       -- Added 'html' as it is essential for Vue templates
       vim.list_extend(opts.ensure_installed, { "vue", "css", "scss", "html" })
+      return opts
     end,
   },
 
@@ -63,6 +65,7 @@ return {
           },
         }
       end
+      return opts
     end,
   },
 
@@ -72,6 +75,7 @@ return {
     opts = function(_, opts)
       opts.formatters_by_ft = opts.formatters_by_ft or {}
       opts.formatters_by_ft.vue = { "prettier" }
+      return opts
     end,
   },
 }

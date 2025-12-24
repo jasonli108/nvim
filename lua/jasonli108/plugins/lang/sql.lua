@@ -7,6 +7,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "sqlfluff" })
+      return opts
     end,
   },
 
@@ -66,6 +67,7 @@ return {
       for _, ft in ipairs(sql_ft) do
         opts.formatters_by_ft[ft] = { "sqlfluff" }
       end
+      return opts
     end,
   },
 
@@ -77,6 +79,7 @@ return {
       for _, ft in ipairs(sql_ft) do
         opts.linters_by_ft[ft] = { "sqlfluff" }
       end
+      return opts
     end,
   },
 
@@ -86,6 +89,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "sql" })
+      return opts
     end,
   },
 
@@ -104,6 +108,7 @@ return {
       })
       opts.bottom = opts.bottom or {}
       table.insert(opts.bottom, { title = "DB Query Result", ft = "dbout" })
+      return opts
     end,
   },
 }

@@ -12,6 +12,7 @@ return {
         "gitignore", 
         "gitattributes" 
       })
+      return opts
     end,
   },
 
@@ -26,6 +27,7 @@ return {
       -- Ensure sources table exists
       opts.sources = opts.sources or {}
       table.insert(opts.sources, { name = "git" })
+      return opts
     end,
   },
 
@@ -36,6 +38,7 @@ return {
     opts = function(_, opts)
       opts.servers = opts.servers or {}
       -- You can add 'gitlint' here if you manage it via Mason
+      return opts
     end,
   },
 

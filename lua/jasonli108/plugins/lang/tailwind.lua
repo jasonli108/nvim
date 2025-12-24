@@ -5,6 +5,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "tailwindcss-language-server" })
+      return opts
     end,
   },
 
@@ -47,6 +48,7 @@ return {
           },
         },
       }
+      return opts
     end,
   },
   -- 3. Autocompletion: Color Previews
@@ -71,6 +73,7 @@ return {
         -- Add the tailwind color square
         return require("tailwindcss-colorizer-cmp").formatter(entry, item)
       end
+      return opts
     end,
   },
 

@@ -5,6 +5,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "angular-language-server" })
+      return opts
     end,
   },
 
@@ -22,6 +23,7 @@ return {
           vim.treesitter.start(nil, "angular")
         end,
       })
+      return opts
     end,
   },
 
@@ -60,6 +62,7 @@ return {
           },
         }
       end
+      return opts
     end,
   },
 

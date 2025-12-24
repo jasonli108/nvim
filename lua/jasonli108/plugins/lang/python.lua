@@ -15,7 +15,9 @@ return {
 				"black",
 				"debugpy",
 				"mypy",
+				"isort",
 			})
+			return opts -- FIXED: Added return
 		end,
 	},
 
@@ -27,33 +29,34 @@ return {
 			opts.servers[lsp_servers.python_ls] = {
 				settings = { python = { analysis = { autoSearchPaths = true } } },
 			}
+			return opts -- FIXED: Added return
 		end,
 	},
 
-	-- 3. Formatting (Forced Import Movement)
-
+	-- 3. Formatting (Black 120 + Forced Import Movement)
 	{
 		"stevearc/conform.nvim",
-		event = { "BufWritePre" }, -- Run on save
-		cmd = { "ConformInfo" },
-		opts = {
-			formatters_by_ft = {
-				python = { "isort", "black" },
-			},
-			formatters = {
-				isort = {
-					-- This flag forces imports past code barriers to the very top
-					prepend_args = { "--float-to-top" },
-				},
-			},
-			format_on_save = {
-				timeout_ms = 500,
-				lsp_fallback = true,
-			},
-		},
+		opts = function(_, opts)
+			opts.formatters_by_ft = opts.formatters_by_ft or {}
+			opts.formatters = opts.formatters or {}
+
+			opts.formatters_by_ft.python = { "isort", "black" }
+
+			-- NEW: Set Black line length to 120
+			opts.formatters.black = {
+				prepend_args = { "--line-length", "120" },
+			}
+
+			opts.formatters.isort = {
+				prepend_args = { "--float-to-top" },
+			}
+
+			opts.format_on_save = { timeout_ms = 500, lsp_fallback = true }
+			return opts -- FIXED: Already had this return, kept it!
+		end,
 	},
 
-	-- 4. Venv Selector (FIXED SYNTAX)
+	-- 4. Venv Selector (Already correct)
 	{
 		"linux-cultist/venv-selector.nvim",
 		branch = "regexp",
@@ -68,6 +71,11 @@ return {
 		opts = function(_, opts)
 			opts.ensure_installed = opts.ensure_installed or {}
 			vim.list_extend(opts.ensure_installed, { "python", "ninja", "rst" })
+			return opts -- FIXED: Added return
+		end,
+		-- Note: Treesitter often requires a custom config function in Lazy.nvim
+		config = function(_, opts)
+			require("nvim-treesitter.configs").setup(opts)
 		end,
 	},
 }

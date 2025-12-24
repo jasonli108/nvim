@@ -48,15 +48,15 @@ return {
 				elements = {
 					{
 						id = "stacks",
-						size = 0.15,
+						size = 0.10,
 					},
 					{
 						id = "scopes",
-						size = 0.60,
+						size = 0.50,
 					},
 					{
 						id = "watches",
-						size = 0.20,
+						size = 0.35,
 					},
 					{
 						id = "breakpoints",
@@ -295,15 +295,23 @@ return {
 			desc = "Terminate Debugging and Close UI",
 		},
 		{
-			"<leader>drs",
+			"<leader>dR",
 			function()
-				local dap = require("dap")
-				local dapui = require("dapui")
-				dap.terminate()
-				dapui.close()
-				dap.continue()
+				require("dap").restart()
 			end,
 			desc = "Restart Debugging Session",
+		},
+		{
+			"<leader>du",
+			function()
+				local dapui = require("dapui")
+				-- 1. Close the UI completely
+				dapui.close()
+				-- 2. Toggle it back open (this forces a redraw of the layout)
+				dapui.open({ reset = true })
+				print("DAP UI Layout Reset")
+			end,
+			desc = "Reset DAP Layout",
 		},
 	},
 }

@@ -6,6 +6,7 @@ return {
       opts.ensure_installed = opts.ensure_installed or {}
       -- Note: rust-analyzer should generally be installed via rustup, not Mason
       vim.list_extend(opts.ensure_installed, { "codelldb", "taplo" })
+      return opts
     end,
   },
 
@@ -15,6 +16,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, { "rust", "ron" })
+      return opts
     end,
   },
 
@@ -65,6 +67,7 @@ return {
           end, desc = "Show Crate Documentation" },
         },
       }
+      return opts
     end,
   },
 
@@ -84,6 +87,7 @@ return {
     opts = function(_, opts)
       opts.sources = opts.sources or {}
       table.insert(opts.sources, { name = "crates" })
+      return opts
     end,
   },
 
