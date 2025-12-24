@@ -105,4 +105,7 @@ opt.foldlevel = 0
 -- opt.foldlevelstart = 0
 --
 --
-vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP Code Actions" })
+vim.diagnostic.config({
+	update_in_insert = false,
+})
+
