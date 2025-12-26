@@ -109,3 +109,5 @@ vim.diagnostic.config({
 	update_in_insert = false,
 })
 
+opt.hidden = true -- Allow switching buffers without saving
+opt.autowrite = true -- Automatically save before commands like :next and :make
