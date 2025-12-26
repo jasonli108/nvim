@@ -36,14 +36,4 @@ vim.keymap.set("n", "<leader>ee", function()
 	})
 end, { desc = "Explorer (Neo-tree, cwd)", noremap = true, silent = true })
 
--- Git Explorer
-vim.keymap.set("n", "<leader>ge", function()
-	require("neo-tree.command").execute({ source = "git_status", toggle = true })
-end, { desc = "Git Explorer", noremap = true, silent = true })
-
--- Buffer Explorer
-vim.keymap.set("n", "<leader>be", function()
-	require("neo-tree.command").execute({ source = "buffers", toggle = true })
-end, { desc = "Buffer Explorer", noremap = true, silent = true })
-
 vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP Code Actions" })
