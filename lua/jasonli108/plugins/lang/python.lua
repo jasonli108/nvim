@@ -17,7 +17,7 @@ return {
 				"mypy",
 				"isort",
 			})
-			return opts -- FIXED: Added return
+			return opts -- FIXED: Ensure Mason returns updated opts
 		end,
 	},
 
@@ -27,9 +27,19 @@ return {
 		opts = function(_, opts)
 			opts.servers = opts.servers or {}
 			opts.servers[lsp_servers.python_ls] = {
-				settings = { python = { analysis = { autoSearchPaths = true } } },
+				settings = {
+					python = {
+						analysis = {
+							autoSearchPaths = true,
+							-- FIX: Add current directory to search path for imports
+							extraPaths = { "." },
+							useLibraryCodeForTypes = true,
+							diagnosticMode = "openFilesOnly",
+						},
+					},
+				},
 			}
-			return opts -- FIXED: Added return
+			return opts
 		end,
 	},
 
@@ -42,7 +52,6 @@ return {
 
 			opts.formatters_by_ft.python = { "isort", "black" }
 
-			-- NEW: Set Black line length to 120
 			opts.formatters.black = {
 				prepend_args = { "--line-length", "120" },
 			}
@@ -52,11 +61,11 @@ return {
 			}
 
 			opts.format_on_save = { timeout_ms = 500, lsp_fallback = true }
-			return opts -- FIXED: Already had this return, kept it!
+			return opts
 		end,
 	},
 
-	-- 4. Venv Selector (Already correct)
+	-- 4. Venv Selector
 	{
 		"linux-cultist/venv-selector.nvim",
 		branch = "regexp",
@@ -71,9 +80,8 @@ return {
 		opts = function(_, opts)
 			opts.ensure_installed = opts.ensure_installed or {}
 			vim.list_extend(opts.ensure_installed, { "python", "ninja", "rst" })
-			return opts -- FIXED: Added return
+			return opts
 		end,
-		-- Note: Treesitter often requires a custom config function in Lazy.nvim
 		config = function(_, opts)
 			require("nvim-treesitter.configs").setup(opts)
 		end,
