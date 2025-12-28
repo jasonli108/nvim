@@ -89,7 +89,7 @@ return {
 			end, "Diff This ~")
 
 			-- Text object
-			map({ "o", "x" }, "hh", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+			map({ "o", "x" }, "ghh", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
 		end,
 	},
 }
