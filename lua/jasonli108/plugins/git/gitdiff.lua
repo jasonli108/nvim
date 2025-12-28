@@ -13,18 +13,20 @@ return {
 		{ "<leader>gdr", "<cmd>DiffviewRefresh<cr>", desc = "Diffview Refresh" },
 		{ "<leader>gdt", "<cmd>DiffviewToggleFiles<cr>", desc = "Diffview Toggle Files" },
 		{ "<leader>gdh", "<cmd>DiffviewFileHistory<cr>", desc = "Diffview File History" },
+		-- Navigation Shortcuts
+		{ "[g", "k<cmd>normal! [c<cr>", desc = "Previous Diff Hunk" },
+		{ "]g", "j<cmd>normal! ]c<cr>", desc = "Next Diff Hunk" },
 	},
 	opts = {
-		enhanced_diff_hl = true, -- Better syntax highlighting in diffs
-		use_icons = true, -- Requires a Nerd Font
+		enhanced_diff_hl = true,
+		use_icons = true,
 		view = {
 			default = {
-				-- Open Diffview in a new tab by default
 				layout = "diff2_horizontal",
 			},
 		},
 		file_panel = {
-			listing_style = "list", -- "list" or "tree"
+			listing_style = "list",
 			tree_config = {
 				flatten_dirs = true,
 				folder_statuses = "only_folded",

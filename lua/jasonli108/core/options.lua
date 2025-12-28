@@ -111,3 +111,5 @@ vim.diagnostic.config({
 
 opt.hidden = true -- Allow switching buffers without saving
 opt.autowrite = true -- Automatically save before commands like :next and :make
+
+opt.diffopt = "vertical,filler,closeoff,linematch:60,internal"

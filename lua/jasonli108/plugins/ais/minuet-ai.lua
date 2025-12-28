@@ -1,32 +1,16 @@
 -- Using Lazy.nvim plugin manager
---
-return {}
--- return {
--- 	{
--- 		"milanglacier/minuet-ai.nvim",
--- 		dependencies = { "nvim-lua/plenary.nvim" },
--- 		config = function()
--- 			require("minuet").setup({
--- 				provider = "gemini",
--- 				provider_options = {
--- 					gemini = {
--- 						model = "gemini-1.5-flash", -- Best balance for free tier
--- 						system = {
--- 							template = "You are a senior software engineer. Complete the code naturally.",
--- 						},
--- 					},
--- 				},
--- 				-- Important: Use virtualtext for ghost-text style completion
--- 				virtualtext = {
--- 					auto_trigger_ft = {}, -- Disable auto-trigger to avoid conflicts with Codeium
--- 					keymap = {
--- 						accept = "<A-A>", -- Alt-A to accept
--- 						next = "<A-]>", -- Alt-] to cycle
--- 						prev = "<A-[>", -- Alt-[ to cycle back
--- 						dismiss = "<A-e>",
--- 					},
--- 				},
--- 			})
--- 		end,
--- 	},
--- }
+return {
+	"milanglacier/minuet-ai.nvim",
+	config = function()
+		require("minuet").setup({
+			provider = "gemini",
+			provider_options = {
+				gemini = {
+					model = "gemini-1.5-flash", -- or 'gemini-2.0-flash' for 2025 speed
+					system_prompt = "You are a specialized code completion assistant...",
+					api_key = "AIzaSyCmluUggfpxnF1FVlRw7Clm4Se9sN2DLbE",
+				},
+			},
+		})
+	end,
+}

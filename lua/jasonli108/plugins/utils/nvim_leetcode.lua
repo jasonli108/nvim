@@ -1,5 +1,6 @@
 return {
 	"jasonli108/nvim_leetcode",
+	-- dir = "~/CS/nvim_leetcode/",
 	opts = {},
 	config = function(_, opts)
 		require("nvim-leetcode").setup({})
