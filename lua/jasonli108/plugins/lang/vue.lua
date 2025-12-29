@@ -52,10 +52,10 @@ return {
 
         opts.servers.vtsls.settings = opts.servers.vtsls.settings or {}
         opts.servers.vtsls.settings.vtsls = opts.servers.vtsls.settings.vtsls or {}
-        opts.servers.vtsls.settings.vtsls.tsserver = opts.servers.vtsls.settings.vtsls.tsserver or {}
+        opts.servers.vtsls.settings.vtsls.ts_ls = opts.servers.vtsls.settings.vtsls.ts_ls or {}
         
         -- Enable the Vue TypeScript plugin inside VTSLS
-        opts.servers.vtsls.settings.vtsls.tsserver.globalPlugins = {
+        opts.servers.vtsls.settings.vtsls.ts_ls.globalPlugins = {
           {
             name = "@vue/typescript-plugin",
             location = vue_plugin_path,

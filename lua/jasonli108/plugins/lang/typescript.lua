@@ -16,7 +16,7 @@ return {
 		opts = function(_, opts)
 			opts.servers = opts.servers or {}
 			-- v3.0.0 cleanup: Ensure old names are strictly disabled
-			opts.servers.tsserver = { enabled = false }
+			opts.servers.ts_ls = { enabled = false }
 			opts.servers.ts_ls = { enabled = false }
 
 			opts.servers.vtsls = {
