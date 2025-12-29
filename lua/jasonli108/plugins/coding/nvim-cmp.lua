@@ -1,66 +1,65 @@
--- Auto-completion / Snippets
+-- Auto-completion / Snippets (AI-first tuned)
 return {
-	-- https://github.com/hrsh7th/nvim-cmp
 	"hrsh7th/nvim-cmp",
 	event = "InsertEnter",
 	dependencies = {
-		-- Snippet engine & associated nvim-cmp source
-		-- https://github.com/L3MON4D3/LuaSnip
+		-- Snippet engine
 		{
 			"L3MON4D3/LuaSnip",
-			version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-			-- install jsregexp (optional!).
+			version = "v2.*",
 			build = "make install_jsregexp",
-			after = "nvim-cmp",
 			config = function()
-				require("jasonli108.snips")
+				local ok = pcall(require, "jasonli108.snips")
+				if not ok then
+					vim.notify("LuaSnip: custom snippets not found", vim.log.levels.WARN)
+				end
 			end,
 		},
-		-- https://github.com/saadparwaiz1/cmp_luasnip
+
+		-- CMP sources
 		"saadparwaiz1/cmp_luasnip",
-
-		-- LSP completion capabilities
-		-- https://github.com/hrsh7th/cmp-nvim-lsp
 		"hrsh7th/cmp-nvim-lsp",
-
-		-- Additional user-friendly snippets
-		-- https://github.com/rafamadriz/friendly-snippets
 		"rafamadriz/friendly-snippets",
-		-- https://github.com/hrsh7th/cmp-buffer
 		"hrsh7th/cmp-buffer",
-		-- https://github.com/hrsh7th/cmp-path
 		"hrsh7th/cmp-path",
-		-- https://github.com/hrsh7th/cmp-cmdline
 		"hrsh7th/cmp-cmdline",
-		-- https://github.com/hrsh7th/cmp-nvim-lsp-signature-help
 		"hrsh7th/cmp-nvim-lsp-signature-help",
 	},
 	config = function()
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
+
 		require("luasnip.loaders.from_vscode").lazy_load()
 		luasnip.config.setup({})
 
 		cmp.setup({
+			-- 🔴 AI safety: do not preselect
+			preselect = cmp.PreselectMode.None,
+
 			snippet = {
 				expand = function(args)
 					luasnip.lsp_expand(args.body)
 				end,
 			},
+
 			completion = {
 				completeopt = "menu,menuone,noinsert",
 			},
+
 			mapping = cmp.mapping.preset.insert({
-				["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
-				["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
-				["<C-b>"] = cmp.mapping.scroll_docs(-4), -- scroll backward
-				["<C-f>"] = cmp.mapping.scroll_docs(4), -- scroll forward
-				["<C-Space>"] = cmp.mapping.complete({}), -- show completion suggestions
+				["<C-j>"] = cmp.mapping.select_next_item(),
+				["<C-k>"] = cmp.mapping.select_prev_item(),
+				["<C-b>"] = cmp.mapping.scroll_docs(-4),
+				["<C-f>"] = cmp.mapping.scroll_docs(4),
+				["<C-Space>"] = cmp.mapping.complete(),
+
+				-- 🔴 AI-safe confirm
 				["<CR>"] = cmp.mapping.confirm({
 					behavior = cmp.ConfirmBehavior.Replace,
-					select = true,
+					select = false,
 				}),
-				-- Tab through suggestions or when a snippet is active, tab to the next argument
+
+				-- Tab: CMP > snippets > fallback
 				["<Tab>"] = cmp.mapping(function(fallback)
 					if cmp.visible() then
 						cmp.select_next_item()
@@ -70,7 +69,7 @@ return {
 						fallback()
 					end
 				end, { "i", "s" }),
-				-- Tab backwards through suggestions or when a snippet is active, tab to the next argument
+
 				["<S-Tab>"] = cmp.mapping(function(fallback)
 					if cmp.visible() then
 						cmp.select_prev_item()
@@ -81,33 +80,47 @@ return {
 					end
 				end, { "i", "s" }),
 			}),
+
+			-- 🧠 AI-FIRST SOURCE PRIORITY
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp_signature_help" },
-				{ name = "nvim_lsp" }, -- lsp
-				{ name = "luasnip" }, -- snippets
-				{ name = "buffer" }, -- text within current buffer
-				{ name = "path" }, -- file system paths
-				{ name = "codeium" }, -- codeium
-				{ name = "codecompanion" }, -- AI-specific completions in the chat buffer
-				{ name = "minuet" }, -- gemini
+				-- AI
+				{ name = "codeium", priority = 1000 },
+				{ name = "codecompanion", priority = 900 },
+				{ name = "minuet", priority = 850 },
+
+				-- LSP
+				{ name = "nvim_lsp_signature_help", priority = 750 },
+				{ name = "nvim_lsp", priority = 700 },
+
+				-- Snippets
+				{ name = "luasnip", priority = 600 },
+
+				-- Fallbacks
+				{ name = "buffer", priority = 300 },
+				{ name = "path", priority = 200 },
 			}),
+
 			window = {
-				-- Add borders to completions popups
 				completion = cmp.config.window.bordered(),
 				documentation = cmp.config.window.bordered(),
 			},
 
 			formatting = {
 				expandable_indicator = true,
-				fields = { "menu", "abbr", "kind" },
+				fields = { "kind", "abbr", "menu" },
 				format = function(entry, item)
 					local menu_icon = {
+						codeium = "󰚩",
+						codecompanion = "",
+						minuet = "󱙺",
 						nvim_lsp = "⋗",
+						nvim_lsp_signature_help = "󰏫",
 						luasnip = "λ",
 						buffer = "Ω",
 						path = "🖫",
 					}
-					item.menu = menu_icon[entry.source.name]
+
+					item.menu = menu_icon[entry.source.name] or "?"
 					return item
 				end,
 			},
