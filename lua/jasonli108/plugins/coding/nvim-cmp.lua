@@ -1,4 +1,3 @@
--- Auto-completion / Snippets (AI-first tuned)
 return {
 	"hrsh7th/nvim-cmp",
 	event = "InsertEnter",
@@ -16,15 +15,16 @@ return {
 			end,
 		},
 
-		-- CMP sources
+		-- CMP sources (NON-AI ONLY)
 		"saadparwaiz1/cmp_luasnip",
 		"hrsh7th/cmp-nvim-lsp",
-		"rafamadriz/friendly-snippets",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-cmdline",
 		"hrsh7th/cmp-nvim-lsp-signature-help",
+		"rafamadriz/friendly-snippets",
 	},
+
 	config = function()
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
@@ -33,7 +33,16 @@ return {
 		luasnip.config.setup({})
 
 		cmp.setup({
-			-- 🔴 AI safety: do not preselect
+			-- 🧠 Disable CMP when minuet inline AI is active
+			enabled = function()
+				local ok, minuet = pcall(require, "minuet")
+				if ok and minuet.is_active and minuet.is_active() then
+					return false
+				end
+				return true
+			end,
+
+			-- 🔴 Never preselect (AI-safe)
 			preselect = cmp.PreselectMode.None,
 
 			snippet = {
@@ -42,7 +51,9 @@ return {
 				end,
 			},
 
+			-- 🧠 Manual-only completion
 			completion = {
+				autocomplete = false,
 				completeopt = "menu,menuone,noinsert",
 			},
 
@@ -51,15 +62,17 @@ return {
 				["<C-k>"] = cmp.mapping.select_prev_item(),
 				["<C-b>"] = cmp.mapping.scroll_docs(-4),
 				["<C-f>"] = cmp.mapping.scroll_docs(4),
+
+				-- Explicit CMP trigger
 				["<C-Space>"] = cmp.mapping.complete(),
 
-				-- 🔴 AI-safe confirm
+				-- 🔴 Confirm must be explicit
 				["<CR>"] = cmp.mapping.confirm({
 					behavior = cmp.ConfirmBehavior.Replace,
 					select = false,
 				}),
 
-				-- Tab: CMP > snippets > fallback
+				-- Tab logic: CMP > snippets > fallback
 				["<Tab>"] = cmp.mapping(function(fallback)
 					if cmp.visible() then
 						cmp.select_next_item()
@@ -81,13 +94,8 @@ return {
 				end, { "i", "s" }),
 			}),
 
-			-- 🧠 AI-FIRST SOURCE PRIORITY
+			-- 🚫 NO AI SOURCES — minuet owns AI
 			sources = cmp.config.sources({
-				-- AI
-				{ name = "codeium", priority = 1000 },
-				{ name = "codecompanion", priority = 900 },
-				{ name = "minuet", priority = 850 },
-
 				-- LSP
 				{ name = "nvim_lsp_signature_help", priority = 750 },
 				{ name = "nvim_lsp", priority = 700 },
@@ -106,13 +114,9 @@ return {
 			},
 
 			formatting = {
-				expandable_indicator = true,
 				fields = { "kind", "abbr", "menu" },
 				format = function(entry, item)
 					local menu_icon = {
-						codeium = "󰚩",
-						codecompanion = "",
-						minuet = "󱙺",
 						nvim_lsp = "⋗",
 						nvim_lsp_signature_help = "󰏫",
 						luasnip = "λ",
@@ -120,7 +124,7 @@ return {
 						path = "🖫",
 					}
 
-					item.menu = menu_icon[entry.source.name] or "?"
+					item.menu = menu_icon[entry.source.name] or ""
 					return item
 				end,
 			},

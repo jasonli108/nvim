@@ -72,14 +72,26 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Auto-stop ollama model
 -- =========================
 --
+
 vim.api.nvim_create_autocmd("VimLeave", {
 	callback = function()
-		-- Replace 'codellama:7b-python' with your actual model name
-		local model = "qwen2.5-coder:latest"
-		local cmd = string.format(
-			'curl -s -X POST http://localhost:11434/api/generate -d \'{"model": "%s", "keep_alive": 0}\'',
-			model
-		)
-		os.execute(cmd)
+		-- 1. Count nvim processes
+		local handle = io.popen("pgrep -x nvim | wc -l")
+		local result = handle:read("*a")
+		handle:close()
+
+		local nvim_instances = tonumber(result:match("%d+")) or 0
+
+		-- 2. If it's 2 or less, this is the last instance closing
+		if nvim_instances <= 2 then
+			local model = "qwen2.5-coder:latest"
+			-- Use 'nohup' and 'prompt: ""' to ensure success
+			local cmd = string.format(
+				"nohup curl -s -X POST http://localhost:11434/api/generate "
+					.. '-d \'{"model": "%s", "prompt": "", "keep_alive": 0}\' >/dev/null 2>&1 &',
+				model
+			)
+			os.execute(cmd)
+		end
 	end,
 })

@@ -41,6 +41,28 @@ return {
 			},
 
 			lualine_x = {
+				-- 🤖 CodeCompanion Spinner
+				{
+					function()
+						-- Check if codecompanion is loaded
+						local ok, companion = pcall(require, "codecompanion")
+						if not ok then
+							return ""
+						end
+
+						-- Get the current status/spinner
+						local status = require("codecompanion.status").get_spinner()
+
+						-- If status is nil or empty, return nothing
+						if not status or status == "" then
+							return ""
+						end
+
+						return "🤖 " .. status
+					end,
+					color = { fg = "#569CD6" }, -- Blue color to match your theme
+				},
+				-- Existing LSP progress
 				{
 					function()
 						return require("lsp-progress").progress()

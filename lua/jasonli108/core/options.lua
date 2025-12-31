@@ -115,8 +115,9 @@ opt.autowrite = true -- Automatically save before commands like :next and :make
 opt.diffopt = "vertical,filler,closeoff,linematch:60,internal"
 
 -- quit or switch without saving buffer
-vim.opt.hidden = true
+opt.hidden = true
 
 -- vim.env.GEMINI_API_KEY = "AIzaSyArXu16N__yOD_1o7cnUkK6nyprJJBWve8"
 -- vim.env.DEEPSEEK_API_KEY = "sk-39fc4655022346d387460145977af8e7" -- Set this env var in your shell
 --
+-- opt.statusline = "%f %h%m%r%=%l,%c %P"
