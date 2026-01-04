@@ -139,6 +139,25 @@ return {
 			-- require('dapui').close()
 		end
 
+		dap.listeners.after.event_output["scroll_to_end"] = function()
+			vim.schedule(function()
+				for _, win in ipairs(vim.api.nvim_list_wins()) do
+					local buf = vim.api.nvim_win_get_buf(win)
+					local ft = vim.bo[buf].filetype
+
+					-- Check for REPL, Terminal, and DAP-UI Console filetypes
+					if ft == "dap-repl" or ft == "dapui_console" or vim.bo[buf].buftype == "terminal" then
+						-- Force cursor to the last line
+						local line_count = vim.api.nvim_buf_line_count(buf)
+						vim.api.nvim_win_set_cursor(win, { line_count, 0 })
+
+						-- Force a redraw of the specific window to prevent "blank" state
+						vim.cmd("redraw")
+					end
+				end
+			end)
+		end
+
 		-- Add dap configurations based on your language/adapter settings
 
 		-- =====================================================
