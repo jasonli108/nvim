@@ -5,42 +5,52 @@ local t = ls.text_node
 local i = ls.insert_node
 
 ls.add_snippets("python", {
-  s({ trig = "main", name = "main header", desc = "check if __name__ is equal to the __main__" }, {
-    t('if __name__ == "__main__":'),
-  }),
+	s({ trig = "main", name = "main header", desc = "check if __name__ is equal to the __main__" }, {
+		t('if __name__ == "__main__":'),
+	}),
 })
 
 ls.add_snippets("python", {
-  s({ trig = "constructor", name = "constructor", desc = "constructor header" }, {
-    t({ "", "  " }),
-    i(0, "def __init__(self): "),
-  }),
+	s({ trig = "__i", name = "constructor", desc = "constructor header" }, {
+		t({ "", "  " }),
+		i(0, "def __init__(self): "),
+	}),
 })
 
 ls.add_snippets("python", {
-  s({ trig = "mainss", name = "main with ss", desc = "main with solution" }, {
-    t('if __name__ == "__main__":'),
-    t({ "", "    " }),
-    i(1, "ss = Solution() "),
-    t({ "", "    " }),
-    i(1, "expect_result = some val"),
-    t({ "", "    " }),
-    i(1, "actual_result = ss.function"),
-    t({ "", "    " }),
-    i(1, "assert actual_result == expect_result"),
-  }),
+	s({
+		trig = "mainss",
+		name = "LeetCode Solution Template",
+		desc = "Template for a LeetCode solution",
+	}, {
+		t('if __name__ == "__main__":'),
+		t({ "", "    ss = Solution()" }),
+		t({ "", "    input_data = 0" }),
+		t({ "", "    expect_result = 0" }), -- Placeholder for expect_result
+		t({ "", "    actual_result = ss.func(input_data)" }),
+		t({ "", "" }),
+		t("    try:"),
+		t({
+			"",
+			'        assert actual_result == expect_result, "Test failed. Expected {expect_result}, got {actual_result}. Please check your code and try again."',
+		}),
+		t({ "", "" }),
+		t("    except AssertionError as e:"),
+		t({ "", "        print(e)" }), -- Print exception message
+	}),
 })
 
-
--- Python docstring snippet
 ls.add_snippets("python", {
-    s("doc", {
-        t({ '"""' }),
-        t({ "", "Summary: " }), i(1, "Brief description of the function."),
-        t({ "", "", "Args:" }),
-        t({ "", "    " }), i(2, "arg_name: Description of the argument."),
-        t({ "", "", "Returns:" }),
-        t({ "", "    " }), i(3, "Description of the return value."),
-        t({ "", '"""' }),
-    }),
+	s("doc", {
+		t({ '"""' }),
+		t({ "", "Summary: " }),
+		i(1, "Brief description of the function."),
+		t({ "", "", "Args:" }),
+		t({ "", "    " }),
+		i(2, "arg_name: Description of the argument."),
+		t({ "", "", "Returns:" }),
+		t({ "", "    " }),
+		i(3, "Description of the return value."),
+		t({ "", '"""' }),
+	}),
 })
