@@ -5,19 +5,16 @@ local t = ls.text_node
 local i = ls.insert_node
 
 ls.add_snippets("python", {
-	s({ trig = "main", name = "main header", desc = "check if __name__ is equal to the __main__" }, {
+	-- Your existing main snippet
+	s({ trig = "main", name = "main header", desc = "check if __name__ is equal to __main__" }, {
 		t('if __name__ == "__main__":'),
 	}),
-})
 
-ls.add_snippets("python", {
 	s({ trig = "__i", name = "constructor", desc = "constructor header" }, {
 		t({ "", "  " }),
 		i(0, "def __init__(self): "),
 	}),
-})
 
-ls.add_snippets("python", {
 	s({
 		trig = "mainss",
 		name = "LeetCode Solution Template",
@@ -25,22 +22,21 @@ ls.add_snippets("python", {
 	}, {
 		t('if __name__ == "__main__":'),
 		t({ "", "    ss = Solution()" }),
+		t({ "", '    setattr(ss, "func", ss.isHappy)' }),
 		t({ "", "    input_data = 0" }),
 		t({ "", "    expect_result = 0" }), -- Placeholder for expect_result
-		t({ "", "    actual_result = ss.func(input_data)" }),
+		t({ "", "    actual_result = ss.func(input_data) # type: ignore" }),
 		t({ "", "" }),
 		t("    try:"),
 		t({
 			"",
-			'        assert actual_result == expect_result, "Test failed. Expected {expect_result}, got {actual_result}. Please check your code and try again."',
+			'        assert actual_result == expect_result, f"Test failed. Expected {expect_result}, got {actual_result}."',
 		}),
 		t({ "", "" }),
 		t("    except AssertionError as e:"),
 		t({ "", "        print(e)" }), -- Print exception message
 	}),
-})
 
-ls.add_snippets("python", {
 	s("doc", {
 		t({ '"""' }),
 		t({ "", "Summary: " }),
@@ -52,5 +48,12 @@ ls.add_snippets("python", {
 		t({ "", "    " }),
 		i(3, "Description of the return value."),
 		t({ "", '"""' }),
+	}),
+
+	-- Updated Triple Quote snippet in the same format
+	s({ trig = '"""', name = "Triple Quote", desc = "Python multi-line docstring" }, {
+		t({ '"""', "    " }), -- The second string in the table starts a new line with indentation
+		i(1, ""), -- Placeholder for your text
+		t({ "", '"""' }), -- New line followed by closing quotes
 	}),
 })

@@ -1,19 +1,39 @@
 -- =========================
 -- Remember folds
 -- =========================
+
+-- Add these to your init.lua
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
 local fold_group = vim.api.nvim_create_augroup("remember_folds", { clear = true })
 
 vim.api.nvim_create_autocmd("BufWinLeave", {
 	group = fold_group,
+	pattern = "?*",
 	callback = function()
-		vim.cmd("silent! mkview")
+		if vim.bo.buftype == "" then
+			vim.cmd("silent! mkview")
+		end
 	end,
 })
 
 vim.api.nvim_create_autocmd("BufReadPost", {
 	group = fold_group,
 	callback = function()
-		vim.cmd("silent! loadview")
+		if vim.bo.buftype == "" then
+			-- 1. Try to load existing manual folds from your view file
+			vim.cmd("silent! loadview")
+
+			-- 2. If no view exists, or to enforce a "clean" start:
+			-- Set the level to 1 so top-level methods stay open, but their guts are closed.
+			vim.opt_local.foldlevel = 2
+
+			-- 3. Ensure we stay in manual mode so your custom folds aren't overwritten
+			vim.schedule(function()
+				vim.opt_local.foldmethod = "manual"
+			end)
+		end
 	end,
 })
 

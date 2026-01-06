@@ -36,3 +36,6 @@ os
 api_key
 pindex
 tcards
+func
+input_data
+None

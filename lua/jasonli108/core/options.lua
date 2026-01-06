@@ -91,18 +91,6 @@ vim.opt.listchars = {
 }
 
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
--- foldering stuff
--- Enable Treesitter-based folding
-opt.foldmethod = "expr"
--- opt.foldexpr = 'nvim_treesitter#foldexpr()'
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-
--- vim.opt.foldmethod = 'manual'
--- opt.foldmethod = 'indent'
--- Optional: Start with all folds open
--- opt.foldenable = true
-opt.foldlevel = 0
--- opt.foldlevelstart = 0
 --
 --
 vim.diagnostic.config({
