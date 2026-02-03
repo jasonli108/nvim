@@ -15,6 +15,8 @@ return {
 		group_empty_dirs = true,
 
 		filesystem = {
+			-- ADD THIS LINE TO ENABLE HIJACKING
+			hijack_netrw_behavior = "open_default",
 			group_empty_dirs = true,
 			filtered_items = {
 				visible = false,
