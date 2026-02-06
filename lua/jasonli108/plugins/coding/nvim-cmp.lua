@@ -17,7 +17,7 @@ return {
 
 		-- CMP sources (NON-AI ONLY)
 		"saadparwaiz1/cmp_luasnip",
-		"hrsh7th/cmp-nvim-lsp",
+		"hrsh7th/cmp-nvim-lsp", -- Required for Pyright built-ins
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-cmdline",
@@ -29,6 +29,7 @@ return {
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
 
+		-- Load friendly-snippets and custom snippets
 		require("luasnip.loaders.from_vscode").lazy_load()
 		luasnip.config.setup({})
 
@@ -53,7 +54,7 @@ return {
 
 			-- 🧠 Manual-only completion
 			completion = {
-				autocomplete = false,
+				autocomplete = false, -- You MUST press <C-Space> to see print, len, etc.
 				completeopt = "menu,menuone,noinsert",
 			},
 
@@ -63,7 +64,7 @@ return {
 				["<C-b>"] = cmp.mapping.scroll_docs(-4),
 				["<C-f>"] = cmp.mapping.scroll_docs(4),
 
-				-- Explicit CMP trigger
+				-- Explicit CMP trigger (Use this to see built-ins)
 				["<C-Space>"] = cmp.mapping.complete(),
 
 				-- 🔴 Confirm must be explicit
@@ -96,11 +97,11 @@ return {
 
 			-- 🚫 NO AI SOURCES — minuet owns AI
 			sources = cmp.config.sources({
-				-- LSP
+				-- LSP (Primary source for Python built-ins)
+				{ name = "nvim_lsp", priority = 1000 },
 				{ name = "nvim_lsp_signature_help", priority = 750 },
-				{ name = "nvim_lsp", priority = 700 },
 
-				-- Snippets
+				-- Snippets (Built-in patterns like if __name__ == "__main__")
 				{ name = "luasnip", priority = 600 },
 
 				-- Fallbacks
@@ -118,7 +119,7 @@ return {
 				format = function(entry, item)
 					local menu_icon = {
 						nvim_lsp = "⋗",
-						nvim_lsp_signature_help = "󰏫",
+						nvim_lsp_signature_help = "  ",
 						luasnip = "λ",
 						buffer = "Ω",
 						path = "🖫",

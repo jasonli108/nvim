@@ -17,24 +17,29 @@ return {
 				"mypy",
 				"isort",
 			})
-			return opts -- FIXED: Ensure Mason returns updated opts
+			return opts
 		end,
 	},
 
-	-- 2. LSP Setup
+	-- 2. LSP Setup (The fix for built-ins is here)
 	{
 		"neovim/nvim-lspconfig",
+		dependencies = { "hrsh7th/cmp-nvim-lsp" },
 		opts = function(_, opts)
+			-- This bridge allows Pyright to send built-in functions to nvim-cmp
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
 			opts.servers = opts.servers or {}
 			opts.servers[lsp_servers.python_ls] = {
+				capabilities = capabilities, -- CRITICAL: Enables built-ins/snippets
 				settings = {
 					python = {
 						analysis = {
 							autoSearchPaths = true,
-							-- FIX: Add current directory to search path for imports
 							extraPaths = { "." },
 							useLibraryCodeForTypes = true,
 							diagnosticMode = "openFilesOnly",
+							typeCheckingMode = "basic",
 						},
 					},
 				},
