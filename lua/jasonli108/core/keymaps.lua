@@ -13,7 +13,7 @@ keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 
 -- quit all
-keymap.set("n", "<leader>qq", "<cmd>quitall<CR>", { desc = "quit all" })
+keymap.set("n", "<leader>qq", "<cmd>quitall!<CR>", { desc = "quit all" })
 
 -- delete single character without copying into register
 keymap.set("n", "x", '"_x')
