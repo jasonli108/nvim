@@ -16,6 +16,7 @@ return {
 		},
 
 		-- CMP sources (NON-AI ONLY)
+		"folke/lazydev.nvim",
 		"saadparwaiz1/cmp_luasnip",
 		"hrsh7th/cmp-nvim-lsp", -- Required for Pyright built-ins
 		"hrsh7th/cmp-buffer",
@@ -25,15 +26,11 @@ return {
 		"rafamadriz/friendly-snippets",
 	},
 
-	config = function()
+	opts = function()
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
 
-		-- Load friendly-snippets and custom snippets
-		require("luasnip.loaders.from_vscode").lazy_load()
-		luasnip.config.setup({})
-
-		cmp.setup({
+		return {
 			-- 🧠 Disable CMP when minuet inline AI is active
 			enabled = function()
 				local ok, minuet = pcall(require, "minuet")
@@ -97,13 +94,19 @@ return {
 
 			-- 🚫 NO AI SOURCES — minuet owns AI
 			sources = cmp.config.sources({
-				-- LSP (Primary source for Python built-ins)
+				-- 🧠 Lazydev (Neovim configuration completion)
+				{
+					name = "lazydev",
+					group_index = 0, -- Skip loading LuaLS completions for these items
+				},
+			}, {
+				-- 🧠 LSP built-ins
 				{ name = "nvim_lsp", priority = 1000 },
 				{ name = "nvim_lsp_signature_help", priority = 750 },
 
 				-- Snippets (Built-in patterns like if __name__ == "__main__")
 				{ name = "luasnip", priority = 600 },
-
+			}, {
 				-- Fallbacks
 				{ name = "buffer", priority = 300 },
 				{ name = "path", priority = 200 },
@@ -118,17 +121,26 @@ return {
 				fields = { "kind", "abbr", "menu" },
 				format = function(entry, item)
 					local menu_icon = {
+						lazydev = "",
 						nvim_lsp = "⋗",
 						nvim_lsp_signature_help = "  ",
 						luasnip = "λ",
 						buffer = "Ω",
 						path = "🖫",
+						git = "",
 					}
 
 					item.menu = menu_icon[entry.source.name] or ""
 					return item
 				end,
 			},
-		})
+		}
+	end,
+
+	config = function(_, opts)
+		local cmp = require("cmp")
+		require("luasnip.loaders.from_vscode").lazy_load()
+		require("luasnip").config.setup({})
+		cmp.setup(opts)
 	end,
 }

@@ -56,8 +56,11 @@ return {
 
 			-- 🧠 LSP-aware indentation
 			lsp = {
-				enabled_ft = { "*" },
-				adjust_indentation = false, -- safer for Python / YAML
+				-- Setting this to empty disables the Minuet LSP server, 
+				-- which stops the "native source" warning while keeping virtualtext active.
+				enabled_ft = {},
+				adjust_indentation = false,
+				warn_on_blink_or_cmp = false,
 			},
 
 			-- 🚫 CMP integration disabled (CMP is manual-only)
